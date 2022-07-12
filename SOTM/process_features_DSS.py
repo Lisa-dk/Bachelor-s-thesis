@@ -28,15 +28,13 @@ def main():
     size = int(sys.argv[1])
     weights_file_name = 'size_' + sys.argv[1] + '.npy'
     save_directory = '../Data/DSS/features/junclets/size_' + sys.argv[1] + '/'
-    #save_directory = '../../../data/s3933083/junclets_features/size_' + sys.argv[1] + '/'
     file_dir = '../Data/DSS/features/Junclets/'
-    #file_dir =  "../../../data/s3933083/Junclets/"
 
     if not os.path.exists(save_directory):
         os.makedirs(save_directory)
 
     start_year = -470
-    n_classes = 11
+    n_classes = 3
     h = size * n_classes
     classes = [-470, -365, -198]
 
@@ -52,7 +50,6 @@ def main():
             codebook += weights.tolist()
     
     print(len(codebook), len(codebook[0]))
-    #process_junclets(file_dir, np.array(codebook), h, size, save_directory)
     process_junclets2(file_dir, np.array(codebook), save_directory)
 
 
