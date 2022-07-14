@@ -1,6 +1,6 @@
 """
 This code is adapted from https://github.com/cgorman/tensorflow-som/blob/tfv2/tf_som.p 
-such that is can be used to train a codebook with the SOTM method.
+such that it can be used to train a codebook with the SOTM method.
 
 Changes were made such that a SOM can be initialised using given weights. 
 Lines 214 and 215 were added, and the function  _prev_weights_init in line 450.
