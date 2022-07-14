@@ -6,6 +6,13 @@ import os
 import numpy as np
 
 def get_DSS_results(file):
+    """
+    Reading sub-codebook size, MAE, MAE SD, CS with α = 0, and CS with α = 0 SD 
+    from a csv file
+
+    The lines in the file should be formatted as:
+    [sub-codebook size],[MAE],[MAE SD],[CS with α = 0],[CS with α = 0 SD]
+    """
     cb_sizes = []
     mae = []
     mae_sd = []
@@ -24,37 +31,51 @@ def get_DSS_results(file):
             cs_0_sd.append(round(float(line[4]),3))
     return cb_sizes, mae, mae_sd, cs_0, cs_0_sd
 
-file = './DSS_results/validation_junclets.csv'
+file = './DSS/validation_junclets.csv'
 cb_sizes, mae, mae_sd, cs_0, cs_0_sd = get_DSS_results(file)
 
+
+# MAE plot
 ax = plt.subplot()
 ax.plot(cb_sizes, mae, color='#1a9988')
+ax.errorbar(cb_sizes, mae, yerr = mae_sd,fmt='o',ecolor = 'black',color='#1a9988', capsize=5)
+
+# Axis visibility
 ax.spines.right.set_visible(False)
 ax.spines.top.set_visible(False)
-ax.errorbar(cb_sizes, mae, yerr = mae_sd,fmt='o',ecolor = 'black',color='#1a9988', capsize=5)
-ax.set_ylim(0, 75) 
 ax.grid(axis = 'y')
 
+# Axis labels and ticks
+ax.set_ylim(0, 75) 
 ax.set_ylabel('MAE in years')
 ax.set_xlabel('Sub-codebook size')
 plt.title('Mean Absolute Error (MAE) over sub-codebook size')
+
 plt.xticks(np.arange(0, 930, 100))
 plt.yticks(np.arange(0, 75, 10)) 
+
 plt.show()
 
-
+# CS with α = 0 years plot
 ax = plt.subplot()
+
 ax.plot(cb_sizes, cs_0, color='#1a9988')
+ax.errorbar(cb_sizes, cs_0, yerr = cs_0_sd,fmt='o',ecolor = 'black',color='#1a9988', capsize=5)
+
+# Axis visibility
 ax.spines.right.set_visible(False)
 ax.spines.top.set_visible(False)
-ax.errorbar(cb_sizes, cs_0, yerr = cs_0_sd,fmt='o',ecolor = 'black',color='#1a9988', capsize=5)
 ax.grid(axis = 'y')
+
+# Axis labels and ticks
 ax.set_ylim(0, 100)
 ax.set_ylabel('CS (%)')
 ax.set_xlabel('Sub-codebook size')
 plt.title('Cumulative Score (α = 0) over sub-codebook size')
+
 plt.xticks(np.arange(0, 930, 100))
 plt.yticks(np.arange(0, 110, 10))
+
 plt.show()
 
 

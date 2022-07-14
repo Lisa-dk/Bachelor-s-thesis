@@ -6,6 +6,12 @@ import os
 import numpy as np
 
 def get_MPS_results(file):
+    """
+    Reads feature names, MAE, CS with α = 25, and CS with α = 0 years of a csv file
+
+    Format of lines in csv file should be as: 
+    [feature],[MAE][CS with α = 25], [CS with α = 0]
+    """
     features = []
     mae = []
     cs_25 = []
@@ -28,87 +34,91 @@ features, mae, cs_25, cs_0 = get_MPS_results(file)
 file = './new/MPS/test_aug.csv'
 features, mae_aug, cs_25_aug, cs_0_aug = get_MPS_results(file)
 
-x = np.arange(len(features))  # the label locations
-width = 0.3  # the width of the bars
+## MAE plots
+x = np.arange(len(features))  # Label locations
+width = 0.3                   # Bar width
 
 ax = plt.subplot()
 
-rects1 = ax.barh(x - width/1.7, width=mae_aug, height=width, label='Augmented', color='#105f55')
-rects2 = ax.barh(x + width/2, width=mae, height=width, label='Non-augmented', color='#1a9988')
+bar_aug = ax.barh(x - width/1.7, width=mae_aug, height=width, label='Augmented', color='#105f55') # Bars for augmented condition
+bar = ax.barh(x + width/2, width=mae, height=width, label='Non-augmented', color='#1a9988')   # Bars for non-augmented condition
 
+# Axis labels
 ax.set_ylabel('Features')
 ax.set_xlabel('MAE in years')
+ax.bar_label(bar_aug, padding=3, fontsize=10)
+ax.bar_label(bar, padding=3, fontsize=10)
 plt.title('Mean Absolute Error (MAE) per feature')
+
 ax.set_yticks(x, features)
 ax.set_xlim(0,25)
+
+# Axis visibility
 ax.set_axisbelow(True)
 ax.grid(zorder=3, axis='x')
-
 ax.spines.right.set_visible(False)
 ax.spines.top.set_visible(False)
 
 plt.legend(bbox_to_anchor=(1.05, 1), loc='upper left', prop={'size': 10})
 
-
-ax.bar_label(rects1, padding=3, fontsize=10)
-ax.bar_label(rects2, padding=3, fontsize=10)
-
 plt.tight_layout()
 plt.show()
 
-
-x = np.arange(len(features)) 
-width = 0.3 
+# MAE for CS with α = 25 years
+x = np.arange(len(features))  # Label locations
+width = 0.3                   # Bar width
 
 ax = plt.subplot()
 
-rects1 = ax.barh(x - width/1.7, width=cs_25_aug, height=width, label='Augmented', color='#105f55')
-rects2 = ax.barh(x + width/2, width=cs_25, height=width, label='Non-augmented', color='#1a9988')
+bar_aug = ax.barh(x - width/1.7, width=cs_25_aug, height=width, label='Augmented', color='#105f55') # Bars for augmented condition
+bar = ax.barh(x + width/2, width=cs_25, height=width, label='Non-augmented', color='#1a9988')   # Bars for non-augmented condtion
+
+# Axis labels
 ax.set_ylabel('Features')
 ax.set_xlabel('CS (%)')
+ax.bar_label(bar_aug, padding=3, fontsize=10)
+ax.bar_label(bar, padding=3, fontsize=10)
 plt.title('Cumulative Score (CS) (α = 25) per feature')
+
 ax.set_yticks(x, features)
 ax.set_xlim(0,105)
 
+# Axis visibility
 ax.set_axisbelow(True)
 ax.grid(zorder=3, axis='x')
-
 ax.spines.right.set_visible(False)
 ax.spines.top.set_visible(False)
 
 plt.legend(bbox_to_anchor=(1.05, 1), loc='upper left', prop={'size': 10})
 
-ax.bar_label(rects1, padding=3, fontsize=10)
-ax.bar_label(rects2, padding=3, fontsize=10)
-
 plt.tight_layout()
-
 plt.show()
 
-
-x = np.arange(len(features))  
-width = 0.3  
+# CS with α = 0 years
+x = np.arange(len(features))  # Label locations
+width = 0.3                   # Bar width
 
 ax = plt.subplot()
-rects1 = ax.barh(x - width/1.7, width=cs_0_aug, height=width, label='Augmented', color='#105f55')
-rects2 = ax.barh(x + width/2, width=cs_0, height=width, label='Non-augmented', color='#1a9988')
+bar_aug = ax.barh(x - width/1.7, width=cs_0_aug, height=width, label='Augmented', color='#105f55') # Bars augmented condition 
+bar = ax.barh(x + width/2, width=cs_0, height=width, label='Non-augmented', color='#1a9988')   # Bars non-augmented condition
+
+# Axis labels
 ax.set_ylabel('Features')
 ax.set_xlabel('CS (%)')
+ax.bar_label(bar_aug, padding=3, fontsize=10)
+ax.bar_label(bar, padding=3, fontsize=10)
 plt.title('Cumulative Score (CS) (α = 0) per feature')
+
 ax.set_yticks(x, features)
 ax.set_xlim(0,105)
 
+# Axis visibility
 ax.set_axisbelow(True)
 ax.grid(zorder=3, axis='x')
-
 ax.spines.right.set_visible(False)
 ax.spines.top.set_visible(False)
 
 plt.legend(bbox_to_anchor=(1.05, 1), loc='upper left', prop={'size': 10})
 
-ax.bar_label(rects1, padding=3, fontsize=10)
-ax.bar_label(rects2, padding=3, fontsize=10)
-
 plt.tight_layout()
-
 plt.show()
