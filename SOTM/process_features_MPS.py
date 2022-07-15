@@ -1,6 +1,6 @@
 import sys
 import os
-import re
+
 import numpy as np
 from tqdm import tqdm
 from numpy import linalg, subtract
@@ -17,23 +17,24 @@ def process_junclets2(file_dir, codebook, save_dir):
     """
     # Iterates over all manuscripts
     for file in tqdm(sorted(os.listdir(file_dir))):
-        counts = [0 for _ in range(len(codebook))]
-        with open(file_dir + file) as f:
-            # Iterating over all graphemes of a .txt file and obtaining the histogram
-            for line in f:
-                line = line.rstrip().split(" ")
-                junclet = np.array([float(el) for el in line])
-                # Finding grapheme in codebook most similar to current one
-                distances = linalg.norm(subtract(junclet, codebook), axis=-1) # Euclidean distance
-                counts[np.argmin(distances)] += 1
-            # Getting the normalised histogram
-            sum_feat = np.sum(counts)
-            features_file = [el / sum_feat for el in counts]
+        if file != ".DS_Store" and not os.path.isdir(file_dir + file):
+            counts = [0 for _ in range(len(codebook))]
+            with open(file_dir + file) as f:
+                # Iterating over all graphemes of a .txt file and obtaining the histogram
+                for line in f:
+                    line = line.rstrip().split(" ")
+                    junclet = np.array([float(el) for el in line])
+                    # Finding grapheme in codebook most similar to current one
+                    distances = linalg.norm(subtract(junclet, codebook), axis=-1) # Euclidean distance
+                    counts[np.argmin(distances)] += 1
+                # Getting the normalised histogram
+                sum_feat = np.sum(counts)
+                features_file = [el / sum_feat for el in counts]
 
-        # Storing the feature vector
-        with open(save_dir + file, 'w+') as feat_f:
-            for feat in features_file:
-                feat_f.write(str(feat) + ' ') 
+            # Storing the feature vector
+            with open(save_dir + file, 'w+') as feat_f:
+                for feat in features_file:
+                    feat_f.write(str(feat) + ' ') 
 
 
 def main():

@@ -1,11 +1,11 @@
-import numpy as np
 import os
 import sys
+import re
+import logging
+
+import numpy as np
 import tensorflow as tf
 from tf_som import SelfOrganizingMap
-import logging
-import os
-import re
 from sklearn.preprocessing import MinMaxScaler
 
 def get_junctions(file_dir, file):
@@ -37,16 +37,17 @@ def get_year_junctions(year, files_dir):
     junctions = []
     print(year)
     for file in sorted(os.listdir(files_dir)):
-        file_year = re.search("(-?[0-9][0-9][0-9])", file)
+        if file != ".DS_Store" and not os.path.isdir(files_dir + file):
+            file_year = re.search("(-?[0-9][0-9][0-9])", file)
 
-        ## Skipping if file belongs to other class than current class
-        if int(file_year.group()) < year:
-            continue
-        elif int(file_year.group()) > year:
-            continue
-        else:
-            print(file)
-            junctions += get_junctions(files_dir, file)
+            ## Skipping if file belongs to other class than current class
+            if int(file_year.group()) < year:
+                continue
+            elif int(file_year.group()) > year:
+                continue
+            else:
+                #print(file)
+                junctions += get_junctions(files_dir, file)
     return junctions
 
 
@@ -119,7 +120,7 @@ def main():
     #device_name = tf.test.gpu_device_name()
     #print(device_name)
     logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
-    file_dir = '../Data/DSS/features/Junclets/'
+    file_dir = './DSS/features/Junclets/'
     ## classes: -470, -365, -198
     year = int(sys.argv[1])                ## year class
     m = n = int(sys.argv[2])               ## Subcodebook size
@@ -136,7 +137,6 @@ def main():
     data = np.array(junctions_year)
 
     data_size = len(data)
-    print(data_size)
     model_name = 'som_' + str(year) + '_' + str(m)
     weights_file = weights_file_dir + 'size_' + str(m)
 

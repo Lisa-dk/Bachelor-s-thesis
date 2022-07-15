@@ -1,7 +1,6 @@
 import matplotlib.pyplot as plt
 plt.rcParams["figure.figsize"] = (8,5)
 plt.rcParams["font.size"] = "12"
-import os
 import numpy as np
 
 def get_MPS_results(file):

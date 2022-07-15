@@ -1,11 +1,11 @@
-import numpy as np
 import os
 import sys
+import logging
+import re
+
+import numpy as np
 import tensorflow as tf
 from tf_som import SelfOrganizingMap
-import logging
-import os
-import re
 from sklearn.preprocessing import MinMaxScaler
 
 def get_junctions(file_dir, file):
@@ -36,15 +36,16 @@ def get_year_junctions(year, files_dir):
     junctions = []
     print(year)
     for file in sorted(os.listdir(files_dir)):
-        file_year = re.search("([0-9][0-9][0-9][0-9])", file)
+        if file != ".DS_Store" and not os.path.isdir(files_dir + file):
+            file_year = re.search("([0-9][0-9][0-9][0-9])", file)
 
-        ## Skipping if file belongs to other class than current class
-        if int(file_year.group()) < year:
-            continue
-        elif int(file_year.group()) > year:
-            break
-        else:
-            junctions += get_junctions(files_dir, file)
+            ## Skipping if file belongs to other class than current class
+            if int(file_year.group()) < year:
+                continue
+            elif int(file_year.group()) > year:
+                break
+            else:
+                junctions += get_junctions(files_dir, file)
     return junctions
 
 def reduce_features(features):

@@ -1,7 +1,6 @@
-from dis import code_info
 import sys
 import os
-import re
+
 import numpy as np
 from tqdm import tqdm
 from numpy import linalg, subtract
@@ -19,7 +18,7 @@ def process_junclets2(file_dir, codebook, save_dir):
 
     # Iterates over all manuscripts
     for file in tqdm(sorted(os.listdir(file_dir))):
-        if file != ".DS_Store":
+        if file != ".DS_Store" and not os.path.isdir(file_dir + file):
             counts = [0 for _ in range(len(codebook))]
             with open(file_dir + file) as f:
                 # Iterating over all graphemes of a .txt file and obtaining the histogram
@@ -42,8 +41,8 @@ def process_junclets2(file_dir, codebook, save_dir):
 def main():
     size = int(sys.argv[1])                             # sub-codebook size to compute the features for
     weights_file_name = 'size_' + sys.argv[1] + '.npy'  # Standard name of files containing weights of sub-codebook
-    save_directory = '../Data/DSS/features/junclets/size_' + sys.argv[1] + '/'
-    file_dir = '../Data/DSS/features/Junclets/'
+    save_directory = './DSS/features/Junclets_/size_' + sys.argv[1] + '/'  # Directory to save features in
+    file_dir = './DSS/features/Junclets/'
 
     if not os.path.exists(save_directory):
         os.makedirs(save_directory)
